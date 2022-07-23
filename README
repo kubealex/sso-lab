@@ -1,11 +1,10 @@
 # Satellite Demo env installer
 
-This is a simple demo environment provisioner for IdM to install.
+This is a simple demo environment provisioner for SSO to install.
 It creates:
 - libvirt-network with DHCP/DNS
 - libvirt-pool for your VMS
-- Satellite server 
-- RHEL7 and RHEL8 Client for demo purposes
+- SSO server 
 
 ## VM setup
 

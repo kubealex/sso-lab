@@ -1,6 +1,6 @@
 ---
 - name: Satellite server configuration playbook
-  hosts: satellite
+  hosts: sso
   become: true
   vars_prompt:
     - name: rhsm_user
@@ -37,7 +37,7 @@
           - jb-eap-7.4-for-rhel-8-x86_64-rpms
           - rhel-8-for-x86_64-baseos-rpms
           - rhel-8-for-x86_64-appstream-rpms
-          - rh-sso-7.5-for-rhel-8-x86_64-rpms
+          - rh-sso-7.6-for-rhel-8-x86_64-rpms
         state: enabled
 
     - name: Ensure all packages are updated
