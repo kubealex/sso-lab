@@ -48,6 +48,7 @@
 
 - name: This play provisions the VM for lab purposes
   hosts: localhost
+  become: true
   vars:
     network_cidr: 192.168.212.0/24
   vars_files:
@@ -151,6 +152,7 @@
         path: ~/.ssh/known_hosts
         state: absent
       loop: "{{ groups['servers'] }}"
+      become: false
 
 - name: Check connection to servers
   hosts: servers
