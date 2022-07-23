@@ -1,4 +1,4 @@
-- name: This play provisions VMs for SSO lab setup 
+- name: This play downloads required ISOs for VM setup 
   hosts: localhost
   vars_prompt:
   - name: offline_token
@@ -6,7 +6,6 @@
     unsafe: yes
     private: yes      
   vars:
-    network_cidr: 192.168.212.0/24
     checksum:
       rhel8: c324f3b07283f9393168f0a4ad2167ebbf7e4699d65c9670e0d9e58ba4e2a9a8
 
@@ -47,13 +46,74 @@
 
       when: offline_token is defined and offline_token != ""
 
+- name: This play provisions the VM for lab purposes
+  hosts: localhost
+  vars:
+    network_cidr: 192.168.212.0/24
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: Ensure required packages are in place
+      ansible.builtin.yum: 
+        name: "{{ packages }}"
 
+    - name: Ensure libvirtd is running
+      ansible.builtin.service: 
+        name: libvirtd
+        state: started
+        enabled: true
+
+    - name: Ensure libvirt can use root as user
+      ansible.builtin.replace:
+        path: /etc/libvirt/qemu.conf
+        regexp: "{{ item.regexp }}"
+        replace: "{{ item.line }}"
+      loop:
+        - regexp: '#user = "root"'
+          line: 'user = "root"'
+        - regexp: '#group = "root"'
+          line: 'group = "root"'
+
+    - name: Restart libvirtd service
+      ansible.builtin.service: 
+        name: libvirtd
+        state: restarted
+   
+    - name: Create required folders
+      ansible.builtin.file:
+        state: directory
+        path: "{{ playbook_dir }}/terraform/kickstart/{{ item.instance }}"
+        recurse: true
+      loop: "{{ modules }}"
+
+    - name: Create symbolic link to RHEL image
+      ansible.builtin.file:
+        src: "{{ playbook_dir }}/{{ item.version }}.iso"
+        dest: "{{ playbook_dir }}/terraform/modules/{{ item.module }}/{{ item.instance }}.iso"
+        state: link
+      loop: "{{ modules }}"
+          
+    - name: Create a 1Mib file to store kickstart 
+      community.general.filesize:
+        path: "{{ playbook_dir }}/terraform/modules/{{ item.module }}/{{ item.instance }}-oemdrv.img"
+        size: 1MiB
+      loop: "{{ modules }}"
+                         
+    - name: Generate kickstart from template
+      ansible.builtin.template:
+        src: ks.cfg.j2
+        dest: "{{ playbook_dir }}/terraform/kickstart/{{ item.instance }}/ks.cfg"
+      loop: "{{ modules }}"
+      vars:
+        hostname: "{{ item.hostname }}"
+          
     - name: Rebuild Kickstart config
       community.general.filesystem:
         fstype: ext2
-        dev: "{{ playbook_dir }}/terraform/modules/01_sso_instance/oemdrv.img"
-        opts: -d {{ playbook_dir }}/terraform/kickstart/rhel8-sso -L OEMDRV
+        dev: "{{ playbook_dir }}/terraform/modules/{{ item.module }}/{{ item.instance }}-oemdrv.img"
+        opts: -d {{ playbook_dir }}/terraform/kickstart/{{ item.instance }} -L OEMDRV
         force: true
+      loop: "{{ modules }}"
 
     - name: Provision all terraform resources
       community.general.terraform:
