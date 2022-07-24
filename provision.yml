@@ -97,7 +97,8 @@
       loop:
         - /opt/rh/rh-sso7/
         - /var/opt/rh/rh-sso7/
-
+      become: true
+      
     - name: Configure admin user
       ansible.builtin.command:
         cmd: "{{ sso_path }}/bin/add-user-keycloak.sh -u admin -p redhat"
