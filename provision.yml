@@ -98,10 +98,10 @@
         - /opt/rh/rh-sso7/
         - /var/opt/rh/rh-sso7/
       become: true
-      
+
     - name: Configure admin user
       ansible.builtin.command:
-        cmd: "{{ sso_path }}/bin/add-user-keycloak.sh -u admin -p redhat"
+        cmd: "/opt/rh/rh-sso7/root/usr/share/keycloak/bin/add-user-keycloak.sh -u admin -p redhat"
       become: true
 
     - name: Start keycloak in standalone configuration
