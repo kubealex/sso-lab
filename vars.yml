@@ -13,3 +13,4 @@ modules:
     instance: rhel8-sso
     hostname: sso
 domain: ssodemo.labs
+sso_path: /opt/rh/rh-sso7/root/usr/share/keycloak
