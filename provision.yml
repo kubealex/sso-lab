@@ -1,5 +1,5 @@
 ---
-- name: Satellite server configuration playbook
+- name: SSO server configuration playbook
   hosts: sso
   become: true
   vars_prompt:
@@ -84,3 +84,12 @@
 
     - name: Reboot server
       reboot: 
+
+- name: SSO configuration playbook
+  hosts: sso
+  become: true
+  tasks:
+    - name: Configure admin user
+      ansible.builtin.command:
+        cmd: 
+      
