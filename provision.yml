@@ -87,13 +87,25 @@
 
 - name: SSO configuration playbook
   hosts: sso
-  become: true
   tasks:
+    - name: Fix permission issues on SSO folders
+      ansible.builtin.file:
+        path: "{{ item }}"
+        owner: jboss
+        group: root
+        recurse: true
+      loop:
+        - /opt/rh/rh-sso7/
+        - /var/opt/rh/rh-sso7/
+
     - name: Configure admin user
       ansible.builtin.command:
         cmd: "{{ sso_path }}/bin/add-user-keycloak.sh -u admin -p redhat"
-    
+      become: true
+
     - name: Start keycloak in standalone configuration
-      ansible.builtin.command:
-        cmd: "{{ sso_path }}/bin/standalone.sh -b {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }} -bmanagement {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
-      
+      ansible.builtin.service:
+        name: rh-sso7
+        enabled: true
+        state: started
+      become: true
