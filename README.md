@@ -1,4 +1,4 @@
-# Satellite Demo env installer
+# Red Hat SSO Demo env installer
 
 This is a simple demo environment provisioner for SSO to install.
 It creates:
@@ -11,7 +11,7 @@ It creates:
 
 ### Download Terraform
 
-VM setup is based on Terraform, it instantiates three virtual machine, *satellite*, *el7-server* and *el8-server*, kickstarting the setup.
+VM setup is based on Terraform, it instantiates one virtual machine, *sso-server* kickstarting the setup.
 
 First you need to download and install Terraform:
 
@@ -83,7 +83,7 @@ The setup will take a bit as it is a full install with a kickstarter.
 
 ## SSO setup
 
-With your lab up and running, you can proceed installing Satellite using the provided **satellite-setup.yml** playbook.
+With your lab up and running, you can proceed installing SSO using the provided **sso-setup.yml** playbook.
 
     ansible-playbook -i inventory sso-setup.yml
 
@@ -95,4 +95,4 @@ It will ask for:
 
 ## Test your configuration
 
-If the setup was good, you will be able to access your IdM server on [](https://sso-server.satellitedemo.labs:8443)
+If the setup was good, you will be able to access your SSO server on [](https://sso-server.ssodemo.labs:8443)
