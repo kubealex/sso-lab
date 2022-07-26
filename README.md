@@ -62,12 +62,12 @@ First you need to download and install Terraform:
     sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
     sudo yum -y install terraform
 
-The playbook can either download RHEL 8.6 and RHEL 9 images, or work with pre-downloaded images. The only requirement is that the images need to be placed in the playbook directory with the name **rhel8.iso** and **rhel9.iso**
+The playbook can either download RHEL 8.6, or work with pre-downloaded images. The only requirement is that the image needs to be placed in the playbook directory with the name **rhel8.iso**.
 
-To download the images via the playbook, you will be prompted to enter your [Offline Token](https://access.redhat.com/management/api) to download resources.
+To download the image via the playbook, you will be prompted to enter your [Offline Token](https://access.redhat.com/management/api) to download resources.
 
 
-**IMPORTANT** If you don't want to download images (it's around 20GB), just leave the variable blank.
+**IMPORTANT** If you don't want to download images (it's around 10GB), just leave the variable blank.
 
 Review settings in **provision-lab.yml** file, containing some basic inputs:
 
