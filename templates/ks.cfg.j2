@@ -1,9 +1,10 @@
 lang en_US
 keyboard us
-timezone Etc/GMT --isUtc
+timezone Etc/GMT --utc
 rootpw --plaintext redhat
 user --name=sysadmin --groups=wheel --password=redhat --plaintext
 #platform x86_64
+cmdline
 reboot
 cdrom
 bootloader --append="rhgb quiet crashkernel=auto"
