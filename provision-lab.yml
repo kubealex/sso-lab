@@ -135,27 +135,17 @@
         name: NetworkManager
         state: restarted
 
-    - name: Add servers to inventory
-      add_host:
-        hostname: "{{ item }}.ssodemo.labs"
-        ansible_user: redhat
-        ansible_ssh_pass: redhat
-        ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
-        groups:
-          - "servers"        
-      loop:
-        - sso
-
     - name: Ensure to clean known_hosts
       known_hosts:
-        host: "{{ item }}"
+        host: "{{ item }}.{{ domain }}"
         path: ~/.ssh/known_hosts
         state: absent
-      loop: "{{ groups['servers'] }}"
+      loop: 
+        - sso
       become: false
 
 - name: Check connection to servers
-  hosts: servers
+  hosts: sso
   gather_facts: no
   tasks:
     - name: Waiting for installation to end, it can take time!
@@ -164,14 +154,6 @@
         delay: 600
 
     - ping:
-
-    - name: Setup sysadmin user to use sudo
-      copy:
-        content: '%wheel	ALL=(ALL)	NOPASSWD: ALL'
-        dest: /etc/sudoers.d/wheelers
-        mode: 0400
-        owner: root
-        group: root
 
     - name: Setup is ready
       debug:
