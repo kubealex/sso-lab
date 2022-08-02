@@ -53,22 +53,6 @@ Once you set the *network_cidr* variable to the desired value, you can run the p
 
     ansible-playbook -i inventory provision-lab.yml
 
-It takes around 20-25 minutes to be up and running. If you experience last step of the playbook being hanging after the machines are completely installed, **relaunch** the playbook as sometimes the ping module gets stuck.
-VM setup is based on Terraform, it instantiates a RHEL8 VM, kickstarting the setup.
-
-First you need to download and install Terraform:
-
-    sudo yum install -y yum-utils
-    sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
-    sudo yum -y install terraform
-
-The playbook can either download RHEL 8.6, or work with pre-downloaded images. The only requirement is that the image needs to be placed in the playbook directory with the name **rhel8.iso**.
-
-To download the image via the playbook, you will be prompted to enter your [Offline Token](https://access.redhat.com/management/api) to download resources.
-
-
-**IMPORTANT** If you don't want to download images (it's around 10GB), just leave the variable blank.
-
 Review settings in **provision-lab.yml** file, containing some basic inputs:
 
     network_cidr = ["192.168.212.0/24"]

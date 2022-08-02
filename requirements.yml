@@ -2,3 +2,6 @@
 collections:
 - community.general
 - ansible.posix
+roles:
+- name: package-downloader
+  src: https://github.com/kubealex/role-package-downloader
