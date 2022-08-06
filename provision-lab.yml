@@ -7,7 +7,7 @@
     private: yes      
   vars:
     checksum:
-      rhel8: c324f3b07283f9393168f0a4ad2167ebbf7e4699d65c9670e0d9e58ba4e2a9a8
+      rhel8: 8cb0dfacc94b789933253d5583a2fb7afce26d38d75be7c204975fe20b7bdf71
 
   tasks:
     - block:
