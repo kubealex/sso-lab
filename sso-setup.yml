@@ -2,22 +2,6 @@
 - name: SSO server configuration playbook
   hosts: sso
   become: true
-  vars_prompt:
-    - name: rhsm_user
-      prompt: What is your RHSM Username (RHNID)?
-      unsafe: yes
-      private: no
-
-    - name: rhsm_password
-      prompt: What is your RHSM Password?
-      unsafe: yes
-      private: yes
-
-    - name: rhsm_pool_id
-      prompt: What is the pool-id for your subscription (check README)?
-      unsafe: yes
-      private: no
-
   tasks:
     - name: Register system with Red Hat Subscription Manager
       community.general.redhat_subscription:
@@ -30,10 +14,10 @@
       community.general.rhsm_repository:
         name: '*'
         state: disabled
-        
+
     - name: Enable required RHSM repositories
       community.general.rhsm_repository:
-        name: 
+        name:
           - jb-eap-7.4-for-rhel-8-x86_64-rpms
           - rhel-8-for-x86_64-baseos-rpms
           - rhel-8-for-x86_64-appstream-rpms
@@ -41,23 +25,23 @@
         state: enabled
 
     - name: Ensure all packages are updated
-      yum:
+      ansible.builtin.dnf:
         name: '*'
-        state: latest
+        state: latest # noqa package-latest
 
     - name: Install SSO packages
-      yum:
+      ansible.builtin.dnf:
         name: '@rh-sso7'
-        state: latest
+        state: latest # noqa package-latest
 
     - name: Ensure chrony is enabled
-      service:
+      ansible.builtin.service:
         name: chronyd
         enabled: true
         state: started
 
     - name: Ensure firewalld is enabled
-      service:
+      ansible.builtin.service:
         name: firewalld
         enabled: true
         state: started
@@ -66,24 +50,24 @@
       ansible.posix.firewalld:
         zone: public
         state: enabled
-        permanent: yes
+        permanent: true
         port: "{{ item }}"
-      loop: 
+      loop:
         - 8080/tcp
         - 8443/tcp
         - 9990/tcp
         - 9993/tcp
-        - 443/tcp 
+        - 443/tcp
         - 389/tcp
         - 636/udp
 
     - name: Reload firewalld service
-      service:
+      ansible.builtin.service:
         name: firewalld
         state: restarted
 
     - name: Reboot server
-      reboot: 
+      ansible.builtin.reboot:
 
 - name: SSO configuration playbook
   hosts: sso
