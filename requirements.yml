@@ -5,3 +5,5 @@ collections:
 roles:
 - name: package-downloader
   src: https://github.com/kubealex/role-package-downloader
+- name: host-provisioner
+  src: https://github.com/kubealex/role-host-provisioner

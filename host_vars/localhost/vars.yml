@@ -1,17 +1,8 @@
-packages:
-  - python3-lxml
-  - python3-netaddr
-  - python3-libvirt
-  - python3-pip
-  - libvirt-devel
-  - libvirt
-  - qemu-kvm
-  - virt-install
-  - virt-manager
 modules:
   - module: 01_sso_instance
     instance: rhel8-sso
     hostname: sso
+    version: rhel8
 domain: ssodemo.labs
 checksum:
   rhel9: c6942e3ed65947ed48c30589d9c1a752e96c5b94ee8de1923331449fee162cc1
