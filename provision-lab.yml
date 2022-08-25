@@ -106,13 +106,12 @@
 
     - name: Ensure to clean known_hosts
       ansible.builtin.known_hosts:
-        host: "{{ item }}.{{ domain }}"
+        host: "{{ item.hostname }}.{{ domain }}"
         path: ~/.ssh/known_hosts
         state: absent
-        mode: 0755
-      loop:
-        - sso
+      loop: "{{ modules }}"
       become: false
+
 
 - name: Check connection to servers
   hosts: sso
