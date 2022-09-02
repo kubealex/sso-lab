@@ -3,3 +3,5 @@ rhsm_pool_id:
 rhsm_user:
 rhsm_password:
 network_cidr: 192.168.212.0/24
+rh_sso_admin_user:
+rh_sso_admin_password:

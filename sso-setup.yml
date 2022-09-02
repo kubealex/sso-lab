@@ -2,72 +2,12 @@
 - name: SSO server configuration playbook
   hosts: sso
   become: true
+  vars_files:
+    - lab_vars.yml
   tasks:
-    - name: Register system with Red Hat Subscription Manager
-      community.general.redhat_subscription:
-        state: present
-        username: "{{ rhsm_user }}"
-        password: "{{ rhsm_password }}"
-        pool_ids: "{{ rhsm_pool_id }}"
-
-    - name: Disable all RHSM repositories
-      community.general.rhsm_repository:
-        name: '*'
-        state: disabled
-
-    - name: Enable required RHSM repositories
-      community.general.rhsm_repository:
-        name:
-          - jb-eap-7.4-for-rhel-8-x86_64-rpms
-          - rhel-8-for-x86_64-baseos-rpms
-          - rhel-8-for-x86_64-appstream-rpms
-          - rh-sso-7.6-for-rhel-8-x86_64-rpms
-        state: enabled
-
-    - name: Ensure all packages are updated
-      ansible.builtin.dnf:
-        name: '*'
-        state: latest # noqa package-latest
-
-    - name: Install SSO packages
-      ansible.builtin.dnf:
-        name: '@rh-sso7'
-        state: latest # noqa package-latest
-
-    - name: Ensure chrony is enabled
-      ansible.builtin.service:
-        name: chronyd
-        enabled: true
-        state: started
-
-    - name: Ensure firewalld is enabled
-      ansible.builtin.service:
-        name: firewalld
-        enabled: true
-        state: started
-
-    - name: Allow ports for SSO
-      ansible.posix.firewalld:
-        zone: public
-        state: enabled
-        permanent: true
-        port: "{{ item }}"
-      loop:
-        - 8080/tcp
-        - 8443/tcp
-        - 9990/tcp
-        - 9993/tcp
-        - 443/tcp
-        - 389/tcp
-        - 636/udp
-
-    - name: Reload firewalld service
-      ansible.builtin.service:
-        name: firewalld
-        state: restarted
-
-    - name: Reboot server
-      ansible.builtin.reboot:
+    - name: Run SSO setup role
+      ansible.builtin.include_role:
+        name: sso-setup
 
 - name: SSO configuration playbook
   hosts: sso
