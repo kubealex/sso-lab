@@ -4,7 +4,7 @@ terraform {
   required_providers {
     libvirt = {
       source  = "dmacvicar/libvirt"
-      version = "0.6.14"
+      version = "0.7.0"
       configuration_aliases = [ libvirt ]
     }
   }
@@ -25,7 +25,7 @@ module "libvirt_resources" {
   libvirt_pool = var.libvirt_pool
 }
 
-module "sso_instance" { 
+module "sso_instance" {
   source = "./modules/01_sso_instance"
   depends_on = [module.libvirt_resources]
 
