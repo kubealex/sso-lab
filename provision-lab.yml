@@ -8,12 +8,15 @@
         name: package-downloader
       vars:
         rh_product_filename: "{{ item.filename }}"
-        rh_product_checksum: "{{ item.checksum }}"
+        rh_product_name: "{{ item.product }}"
         rh_api_offline_token: "{{ offline_token }}"
       loop:
         - filename: rhel8.iso
-          checksum: "{{ checksum.rhel8 }}"
-      when: offline_token is defined and offline_token != ""
+          product: "rhel8"
+      when:
+        - offline_token is defined
+        - offline_token != ""
+
 
 - name: This play provisions the VM for lab purposes
   hosts: localhost
